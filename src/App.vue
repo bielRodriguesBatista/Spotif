@@ -1,26 +1,84 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <header> 
+    <h1>My music</h1>
+    </header>
+  <main>
+    <section class="player">
+      <h2 class="song"> {{current.title}} - <span> {{current.artist}} </span></h2>
+      <div class="controls">
+        <button class="prev">Prev</button>
+        <button class="play" v-if="!isPlaying">Play</button>
+        <button class="pause" v-else>Pause</button>
+        <button class="next">Next</button>
+      </div>
+    </section>
+  </main>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  data(){
+    return {
+      current: {},
+      index: 0,
+      isPlaying: false,
+      songs:  [
+        {
+          title: 'I fall apart',
+          artist: 'Andrey Azizov Remix',
+          src: require('./music/Post-Malone.mp3')
+        },
+        {
+          title: 'Radioactive',
+          artist: 'Imagine Dragons',
+          src: require('./music/Imagine-Dragons-Radioactive.mp3')
+        }
+      ],
+      player: new Audio()
+    }
+  },
+    methods: {
+      play(song){
+        if(typeof song.src != 'undefined'){
+          this.current = song;
+
+          this.player.src = this.current.src;
+        }
+
+        this.player.play();
+        this.isPlaying = true;
+      }
+    },
+  created () {
+    this.current = this.songs[this.index];
+    this.player.src = this.current.src;
+    // this.player.play();
   }
+
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body{
+  font-family: sans-serif;
+}
+
+header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  background-color: #212121;
+  color: #fff;
 }
 </style>
